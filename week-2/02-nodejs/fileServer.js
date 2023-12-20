@@ -18,10 +18,9 @@ const path = require("path");
 const app = express();
 
 app.get("/files", (req, res) => {
-  const pa = fs.readdir(path.join(__dirname, "/files/"), (err, data) => {
+  fs.readdir(path.join(__dirname, "/files/"), (err, data) => {
     if (err) {
-      console.log(pa);
-      return res.status(404).send("file not found");
+      return res.status(404).json("Failed to retrieve files");
     }
     res.json(data);
   });
@@ -38,12 +37,8 @@ app.get("/files/:filename", function (req, res) {
   });
 });
 
-app.get("*", (req, res) => {
+app.all("*", (req, res) => {
   res.status(404).send("Route not found");
-});
-
-app.listen(3000, (data) => {
-  console.log("app started on port 3000");
 });
 
 module.exports = app;
